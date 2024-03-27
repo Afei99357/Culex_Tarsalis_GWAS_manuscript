@@ -4,10 +4,6 @@ library("pegas")
 library(dplyr) ## for filtering table
 library(vcfR)
 
-### Install OutFLANK if not installed
-if (!("OutFLANK" %in% installed.packages())){install_github("whitlock/OutFLANK")}
-library(OutFLANK) ## fst outlier analysis
-
 ### Install required package devtools if not installed
 if (!("devtools" %in% installed.packages())){install.packages("devtools")}
 library(devtools)
@@ -22,17 +18,17 @@ vcf <- read.vcfR( "/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/
 vcfIDs <- as.vector(colnames(vcf@gt))[-1]
 
 ## read sample information file
-env <- read.csv("/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Ctarsalis_sample_w_GPS_climate.csv", row.names = NULL)
+env <- read.csv("/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Ctarsalis_sample_w_GPS_climate_average_new_filtered_id_region.csv", row.names = NULL)
 
 ## get popID and vcfID
-sample_info_popid <- subset(env, select = c(vcfID, popID, Region))
+sample_info_popid <- subset(env, select = c(vcfID, popID, region))
 
 ## find Population ID
 matched_pop <- sample_info_popid %>% filter(vcfID %in% vcfIDs)
 
 ## get the population and region information
 population <- matched_pop$popID
-regions <- matched_pop$Region
+regions <- matched_pop$region
 indivduals <- as.character(matched_pop$vcfID)
 
 ## convert to genind object
