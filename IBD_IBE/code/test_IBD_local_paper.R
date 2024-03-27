@@ -169,7 +169,7 @@ dens2_df$z <- as.vector(dens_2$z)
 
 # Common theme adjustments for consistency
 common_theme <- theme(text = element_text(size=24, family="Arial"),
-                      plot.title = element_text(hjust = 0.5, size = 30, family="Arial"),
+                      plot.title = element_text(hjust = 0, size = 30, family="Arial"),
                       panel.border = element_rect(colour = "black", fill=NA, size=1),
                       axis.title = element_text(size=16, family="Arial"))
 
@@ -182,7 +182,8 @@ p1 <- ggscatter(temp.df, x="Dgeo", y="Dgen", color="#0072B2",
                 conf.int = TRUE,
                 cor.coef = FALSE) + 
   ggtitle("(A)") +
-  common_theme
+  common_theme +
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 
 # Plot 2: Environmental Distance vs. Genetic Distance
 p2 <- ggscatter(temp.df, x="Denv", y="Dgen", color="#0072B2",
@@ -193,7 +194,8 @@ p2 <- ggscatter(temp.df, x="Denv", y="Dgen", color="#0072B2",
                 conf.int = TRUE,
                 cor.coef = FALSE) + 
   ggtitle("(B)") +
-  common_theme
+  common_theme +
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank())
 
 # Plot 3: Geographic Distance with Density
 p3 <- ggplot(temp.df, aes(x = Dgeo, y = Dgen)) +
@@ -219,7 +221,8 @@ p4 <- ggplot(temp.df, aes(x = Denv, y = Dgen)) +
   theme_minimal() +
   common_theme +
   theme(legend.position = c(0.9, 0.2)) +
-  theme(legend.title = element_blank())
+  theme(legend.title = element_blank()) +
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
 
 # Save plots to PNG
 png("/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Paper_results/IBD_IBE_test/r_code/IBD_IBE_Plots.png", width=20, height=20, units="in", res=300)

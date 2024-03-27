@@ -35,20 +35,31 @@ colnames(result) <- c("GPS.Lon", "GPS.Lat", "Northwest", "Midwest", "West Coast"
 ## adjust the radius range based on sample count
 result$Sample_Count <- sqrt(result$Sample_Count) / 3.5
 
-admixture_pieplot <-base_map + geom_scatterpie(aes(x = GPS.Lon, y = GPS.Lat, r = Sample_Count), 
-                              data = result, 
-                              pie_scale=0.1,
-                              cols = c("Northwest", "Midwest", "West Coast", "Southwest"), 
-                              color=NA) + 
+admixture_pieplot <- base_map + geom_scatterpie(aes(x = GPS.Lon, y = GPS.Lat, r = Sample_Count), 
+                                                data = result, 
+                                                pie_scale=0.1,
+                                                cols = c("Northwest", "Midwest", "West Coast", "Southwest"), 
+                                                color=NA) + 
   coord_equal(expand = FALSE) + 
   scale_fill_manual(values=layer_colors) +
   labs(
     x = "Longitude",
     y = "Latitude",
     fill = "Regions") + 
-  theme(legend.position = c(0.9, 0.85),  # Adjust the legend position
-        legend.text = element_text(size = 20),  # Adjust the size of the legend labels
-        legend.title = element_text(size = 25)) 
+  theme(
+        legend.position = "none",  # Adjust the legend position
+        # legend.text = element_text(size = 30),  # Adjust the size of the legend labels
+        # legend.title = element_text(size = 35),
+        legend.title = element_blank(), # Remove legend title
+        panel.background = element_blank(),  # Remove panel background
+        panel.grid.major = element_blank(),  # Remove major grid lines
+        panel.grid.minor = element_blank(),  # Remove minor grid lines
+        axis.text.x = element_blank(),  # Remove x-axis tick labels
+        axis.text.y = element_blank(),  # Remove y-axis tick labels
+        axis.ticks = element_blank(),
+        axis.title.x = element_blank(), #remove x axis label 
+        axis.title.y = element_blank(), #remove y axis label
+        ) 
 
 admixture_pieplot
 ggsave("/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Paper_results/Admixture/admixtrue_pie_map_plot.png", 

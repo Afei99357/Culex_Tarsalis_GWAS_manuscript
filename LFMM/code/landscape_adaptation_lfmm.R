@@ -26,7 +26,7 @@ gen.imp <- apply(allele_matrix_genlight, 2, function(x) replace(x, is.na(x), as.
 sum(is.na(gen.imp)) # check if No NAs
 
 ##Load the enviromental data and get it ready for analysis
-env <- read.csv("/Users/ericliao/Desktop/WNV_project_files/Ctarsalis_sample_w_GPS_climate_average_new_filtered_id_region.csv", row.names = 1) # load enviromental data
+env <- read.csv("/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Ctarsalis_sample_w_GPS_climate_average_new_filtered_id_region.csv", row.names = 1) # load enviromental data
 
 env <- env[, !(names(env) %in% c("locID", "State", "City", "date"))] # remove unused columns
 
@@ -169,3 +169,15 @@ write.csv(combined_LFMM_candidates[combined_LFMM_candidates$origin == "LFMM_PC1"
 write.csv(combined_LFMM_candidates[combined_LFMM_candidates$origin == "LFMM_PC2", ], "/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Paper_results/Landscape_genetics_GEA/LFMM_LatentFactorMixedModels/lfmm_PC2_adaptation_candidates.csv", row.names = FALSE)
 write.csv(combined_LFMM_candidates[combined_LFMM_candidates$origin == "LFMM_PC3", ], "/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Paper_results/Landscape_genetics_GEA/LFMM_LatentFactorMixedModels/lfmm_PC3_adaptation_candidates.csv", row.names = FALSE)
 
+
+## ## get the snps are not in the candidate list
+non_cand <- colnames(allele_matrix_genlight)[!colnames(allele_matrix_genlight) %in% LFMM_PC1_df$adaptation_candidates]
+
+## create a data frame to store the list of non-candidate SNPs
+non_cand <- cbind.data.frame(non_cand)
+
+## colnames is snp
+colnames(non_cand) <- c("snp")
+
+## output non_cand to a file 
+write.csv(non_cand, file = "/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Paper_results/Landscape_genetics_GEA/LFMM_LatentFactorMixedModels/lfmm_PC1_adaptation_non_candidates.csv", row.names = FALSE)
