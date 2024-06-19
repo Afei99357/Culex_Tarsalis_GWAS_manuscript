@@ -30,7 +30,7 @@ pca <- glPca(SNP_genlight, nf=10) # choose 10 axes
 
 # Create a vector to assign colors to populations
 levels(sample_info$region) <- levels(as.factor(sample_info$region))
-color_vector <- c("goldenrod","skyblue","hotpink","forestgreen") # 4 nice colors for our regions
+color_vector <- c("hotpink","skyblue","forestgreen","goldenrod") # 4 nice colors for our regions
 color_mapping <- color_vector[as.factor(sample_info$region)]
 
 png("/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Paper_results/outlier_analysis/pca_region_pc1_pc2_new.png", width=20, height=10, units="in", res=300)
