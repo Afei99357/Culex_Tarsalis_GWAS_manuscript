@@ -1,4 +1,3 @@
-library(conStruct)
 library(ggplot2)
 library(scatterpie)
 library(dplyr)

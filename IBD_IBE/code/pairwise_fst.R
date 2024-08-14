@@ -1,10 +1,7 @@
 library("vcfR")     # for vcf file
 library("adegenet") # for genlight obeject and tab() function
 library("dplyr") ## for filtering table
-library("hierfstat")
-library("pegas")
-library("devtools")
-library("poppr")
+library("hierfstat") ## for pairwise Fst
 
 rm(list = ls())
 

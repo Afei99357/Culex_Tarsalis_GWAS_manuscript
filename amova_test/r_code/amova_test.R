@@ -2,8 +2,6 @@ library("vcfR")     # for vcf file
 library("adegenet") # for genlight obeject and tab() function
 library("dplyr") ## for filtering table
 library("hierfstat")
-library("pegas")
-library("devtools")
 library("poppr")
 library("ade4")
 
@@ -50,24 +48,6 @@ png("/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Paper_results/
 plot(div$Hobs, div$Hexp, xlab="Observed Heterozygosity", ylab="Expect Heterozygosity under HWE", main="heterozygosity-observed heterozygosity plot")
 dev.off()
 
-# test : H0: Hexp = Hobs. from the result,
-# if p-values < a (0.05) which means the variances of div$Hexp and div$Hobs are significantly different.
-bartlett.test(list(div$Hexp, div$Hobs)) 
-
-## Converts genind objects from adegenet into a hierfstat data frame
-hfstat <- genind2hierfstat(SNP_genind)
-
-basicstat <- basic.stats(hfstat, diploid = TRUE, digits = 2) 
-names(basicstat) ## the observed heterozygosity (Ho), mean gene diversities within population (Hs), Fis, and Fst.
-
-## individual fst
-# basicstat$perloc
-
-## 95% confidence interval for Fis
-boot.ppfis(hfstat, quant=c(0.025, 0.975), diploid=TRUE,nboot=100)
-
-# Weir and Cockerham's Fst estimate ()
-wc(SNP_genind) ## FST :  0.1391815  FIS:0.2506732
 
 ## Hierachical Fst tests (= AMOVA for SNP dataset)
 # loci <- hfstat[, -1] # Remove the population column

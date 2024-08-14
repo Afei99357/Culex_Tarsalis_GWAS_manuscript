@@ -85,10 +85,10 @@ row_names <- pop.coords$popID
 clim.table <- pop.coords[, c("avg_u10", "avg_v10", "avg_t2m", "avg_lai_hv", "avg_lai_lv", "avg_src", "avg_sro", "avg_e")]
 
 # standardize the data before Euclildian distance
-# standardizw_matrix <- round(scale(clim.table[, -1]), 4)
+# standardizw_matrix <- round(scale(clim.table), 4)
 
 ### Next, get the Canberra distances based on the mean environmental variables
-dist.env <- dist(clim.table[, -1], method = 'canberra')
+dist.env <- dist(clim.table, method = 'canberra')
 IBE.env <- vegan::mantel(mat.gen,dist.env, method="spearman", permutations=9999)
 
 IBE.env

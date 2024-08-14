@@ -11,7 +11,7 @@ FILE=culex_plink_new
 cd /projects/cooper_research2/eric/data_landscape_genetics/plink_file_for_admixture
 
 # load R
-for i in {6..8}
+for i in {1..12}
 do
 	echo start no.$i
 	/projects/cooper_research2/eric/data_landscape_genetics/admixture_linux-1.3.0/admixture --cv $FILE.bed $i > log${i}.out
