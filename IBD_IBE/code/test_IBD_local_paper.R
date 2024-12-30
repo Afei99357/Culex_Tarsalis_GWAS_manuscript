@@ -1,12 +1,10 @@
-### Note tCtarsalis_sample_w_GPS_climate_new_filtered_idhat a lot of this code (especially the model testing)
+### Note tCtarsalis_sample_w_GPS_climate_new_filtered_id hat a lot of this code (especially the model testing)
 ### comes from bookdown.org/hhwagner1/LandGenCourse
 ### Set working directory and environment variables
 #setwd("/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/R_code")
 #options(stringsAsFactors = FALSE)
-library(geosphere)
+library(geosphere) ## calculate geographic distance
 library(vegan)
-library(Fragman)
-library(extrafont)
 library(cowplot)
 library(corMLPE)
 
@@ -85,7 +83,7 @@ row_names <- pop.coords$popID
 clim.table <- pop.coords[, c("avg_u10", "avg_v10", "avg_t2m", "avg_lai_hv", "avg_lai_lv", "avg_src", "avg_sro", "avg_e")]
 
 # standardize the data before Euclildian distance
-# standardizw_matrix <- round(scale(clim.table), 4)
+clim.table <- scale(clim.table)
 
 ### Next, get the Canberra distances based on the mean environmental variables
 dist.env <- dist(clim.table, method = 'canberra')
@@ -114,10 +112,10 @@ temp.df$Denvz <- scale(temp.df$Denv, center=TRUE, scale=TRUE)
 ### Check for colinearity
 CSF.df = temp.df[,6:8]
 usdm::vif(CSF.df)
-# Variables      VIF
-# 1     Dgenz 1.314403
-# 2     Dgeoz 1.310785
-# 3     Denvz 1.006497
+##Variables      VIF
+##1     Dgenz 1.461880
+##2     Dgeoz 1.490128
+##3     Denvz 1.037864
 
 ### Run a Mixed Model to look at Both Distance AND Environment together
 mixMod <- nlme::gls(Dgenz ~ Dgeoz + Denvz, 
@@ -151,6 +149,26 @@ RL.B <- exp(-0.5*(CSF.IC$BIC - BICmin))
 sumRL.B <- sum(RL.B)
 CSF.IC$BICew <- RL.B/sumRL.B
 round(CSF.IC,3)
+
+geo_model <- lm(Dgen ~ Dgeo, data = temp.df)
+summary(geo_model)
+
+env_model <- lm(Dgen ~ Denv, data = temp.df)
+summary(env_model)
+
+# For Geographic Distance
+geo_coeff <- coef(geo_model)
+geo_slope <- geo_coeff["Dgeo"]
+geo_intercept <- geo_coeff["(Intercept)"]
+
+# For Environmental Distance
+env_coeff <- coef(env_model)
+env_slope <- env_coeff["Denv"]
+env_intercept <- env_coeff["(Intercept)"]
+
+# Print the formulas
+cat("Geographic Distance Formula: Dgen =", geo_slope, "* Dgeo +", geo_intercept, "\n")
+cat("Environmental Distance Formula: Dgen =", env_slope, "* Denv +", env_intercept, "\n")
 
 library(ggplot2)
 library(ggpubr)
@@ -230,5 +248,37 @@ png("/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Paper_results/
 # Arrange and save the combined plot
 plot_grid(p1, p2, p3, p4, ncol = 2)
 
+dev.off()
+
+### Regular correlation scatter plots with regression lines
+library(ggpubr)
+
+p1 = ggscatter(temp.df, x="Dgeo",, y="Dgen", color="#0072B2",
+               xlab="Geographic Distance (m)",
+               ylab="Genetic Distance (1/(1-Fst))",
+               add = "reg.line",
+               add.params = list(color="#CC79A7", fill="lightpink"),
+               conf.int = TRUE,
+               cor.coef=FALSE,
+               theme(text=element_text(size=16, family="Arial"))) +
+  stat_regline_equation(aes(label = paste(..eq.label.., ..rr.label.., sep = "~`, `~")),
+                        size = 5,
+                        label.y = 0.25)
+
+p2 = ggscatter(temp.df, x="Denv",, y="Dgen", color="#0072B2",
+               xlab="Environmental Distance",
+               ylab="",
+               add = "reg.line",
+               add.params = list(color="#CC79A7", fill="lightpink"),
+               conf.int = TRUE,
+               cor.coef=FALSE,
+               theme(text=element_text(size=16, family="Arial"))) +
+  stat_regline_equation(aes(label = paste(..eq.label.., ..rr.label.., sep = "~`, `~")),
+                        size = 5,
+                        label.y = 0.25)
+
+png("/Users/ericliao/Desktop/WNV_project_files/landscape_genetics/Paper_results/IBD_IBE_test/r_code/IBD_IBE_Plots_with_formula.png", width=20, height=10, units="in", res=300)
+# plot_grid(p1, p2, labels = c('A', 'B'), label_size = 24)
+plot_grid(p1, p2, label_size = 24)
 dev.off()
 
